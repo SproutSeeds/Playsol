@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playsol</title>
+  <style>
+    /* General Reset */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* Starry Night Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at bottom, #000, #020202 50%, #0a0a0a);
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?stars,space') no-repeat center center/cover;
+      opacity: 0.5;
+      z-index: -1;
+    }
+
+    /* Playsol Title */
+    h1 {
+      position: absolute;
+      top: 5%;
+      width: 100%;
+      text-align: center;
+      font-size: 6vw; /* Scales with window size */
+      color: transparent;
+      background: linear-gradient(45deg, orange, yellow, red);
+      -webkit-background-clip: text;
+      font-family: 'Bubblegum Sans', cursive;
+      animation: glowing 2s infinite alternate;
+    }
+
+    @keyframes glowing {
+      from {
+        filter: drop-shadow(0 0 10px orange) drop-shadow(0 0 20px red);
+      }
+      to {
+        filter: drop-shadow(0 0 20px yellow) drop-shadow(0 0 40px orange);
+      }
+    }
+
+    /* Orbiting Animation */
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40vw; /* Scales with window size */
+      height: 40vw; /* Scales with window size */
+      transform: translate(-50%, -50%);
+      border: 2px dashed rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+    }
+
+    /* Sun Styling */
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6vw;
+      height: 6vw;
+      background: radial-gradient(circle, yellow, orange, red, darkred);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 40px 20px rgba(255, 140, 0, 0.8);
+      animation: fireGlow 1.5s infinite alternate;
+      cursor: pointer;
+    }
+
+    @keyframes fireGlow {
+      0% {
+        box-shadow: 0 0 50px 20px rgba(255, 69, 0, 0.8), 0 0 100px 40px rgba(255, 165, 0, 0.6);
+      }
+      100% {
+        box-shadow: 0 0 30px 15px rgba(255, 99, 71, 0.8), 0 0 80px 30px rgba(255, 140, 0, 0.5);
+      }
+    }
+
+    /* Earth Styling */
+    .earth {
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 3vw;
+      height: 3vw;
+      background: linear-gradient(to bottom, #3a86ff, #0077be);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 15px rgba(0, 0, 255, 0.7);
+      animation: rotateEarth 5s linear infinite;
+    }
+
+    /* Music Notes */
+    .note {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.5vw;
+      animation: floatNote 1s linear forwards, fadeOut 1s linear 1s forwards;
+    }
+
+    @keyframes floatNote {
+      from {
+        transform: translate(0, 0);
+      }
+      to {
+        transform: translate(-100px, -50px) rotate(360deg);
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* Animations */
+    @keyframes rotate {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    @keyframes rotateEarth {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Playsol</h1>
+  <div class="orbit">
+    <div class="sun" onclick="handleSunClick()"></div>
+    <div class="earth" id="earth"></div>
+  </div>
+
+  <script>
+    let clickCount = 0; // Track total number of clicks
+    let fadeTimeout;
+
+    function handleSunClick() {
+      clickCount++;
+      const earth = document.getElementById("earth");
+
+      // Create a music note
+      const note = document.createElement("div");
+      note.classList.add("note");
+      note.style.left = `${Math.random() * 100}%`;
+      note.style.top = `${Math.random() * 100}%`;
+
+      // Random music note character
+      const notes = ["♪", "♫", "♩", "♬", "♭"];
+      note.innerText = notes[Math.floor(Math.random() * notes.length)];
+
+      earth.appendChild(note);
+
+      // Remove the note after animation
+      setTimeout(() => {
+        earth.removeChild(note);
+      }, 2000);
+
+      // Reset fade-out timer
+      clearTimeout(fadeTimeout);
+      fadeTimeout = setTimeout(() => {
+        clickCount = 0;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
